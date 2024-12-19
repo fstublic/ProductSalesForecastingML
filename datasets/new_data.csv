@@ -1,0 +1,11 @@
+Row ID,Order ID,Order Date,Ship Date,Ship Mode,Customer ID,Country/Region,City,State/Province,Postal Code,Division,Region,Product ID,Product Name,Sales,Gross Profit,Cost
+1133,US-2021-138100-CHO-MIL-31000,2021-09-15,2027-03-13,Standard Class,138100,United States,New York City,New York,10011,Chocolate,Atlantic,CHO-MIL-31000,Wonka Bar - Milk Chocolate,9.75,6.33,3.42
+3396,US-2022-121391-CHO-MIL-31000,2022-10-04,2028-03-29,First Class,121391,United States,San Francisco,California,94109,Chocolate,Pacific,CHO-MIL-31000,Wonka Bar - Milk Chocolate,6.5,4.22,2.28
+4377,US-2023-103982-CHO-MIL-31000,2023-03-03,2028-08-28,Standard Class,103982,United States,Round Rock,Texas,78664,Chocolate,Interior,CHO-MIL-31000,Wonka Bar - Milk Chocolate,9.75,6.33,3.42
+387,US-2021-158064-CHO-MIL-31000,2021-04-21,2026-10-16,Standard Class,158064,United States,Los Angeles,California,90008,Chocolate,Pacific,CHO-MIL-31000,Wonka Bar - Milk Chocolate,16.25,10.55,5.7
+1397,US-2021-130729-CHO-MIL-31000,2021-10-24,2027-04-21,Standard Class,130729,United States,Rancho Cucamonga,California,91730,Chocolate,Pacific,CHO-MIL-31000,Wonka Bar - Milk Chocolate,9.75,6.33,3.42
+8580,US-2024-169488-CHO-MIL-31000,2024-09-07,2030-03-02,First Class,169488,United States,Providence,Rhode Island,02908,Chocolate,Atlantic,CHO-MIL-31000,Wonka Bar - Milk Chocolate,6.5,4.22,2.28
+665,US-2021-154963-CHO-MIL-31000,2021-06-22,2026-12-18,Standard Class,154963,United States,Chester,Pennsylvania,19013,Chocolate,Atlantic,CHO-MIL-31000,Wonka Bar - Milk Chocolate,9.75,6.33,3.42
+1761,US-2021-143210-CHO-MIL-31000,2021-12-01,2027-05-26,First Class,143210,United States,Lowell,Massachusetts,01852,Chocolate,Atlantic,CHO-MIL-31000,Wonka Bar - Milk Chocolate,9.75,6.33,3.42
+5148,US-2023-147137-CHO-MIL-31000,2023-07-04,2028-12-26,First Class,147137,United States,San Francisco,California,94109,Chocolate,Pacific,CHO-MIL-31000,Wonka Bar - Milk Chocolate,16.25,10.55,5.7
+5582,US-2023-131205-CHO-MIL-31000,2023-09-04,2029-02-28,Standard Class,131205,United States,Georgetown,Kentucky,40324,Chocolate,Gulf,CHO-MIL-31000,Wonka Bar - Milk Chocolate,19.5,12.66,6.84

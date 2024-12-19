@@ -1,0 +1,25 @@
+# Python cache and compiled files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.so
+*.dylib
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Virtual environment directories
+venv/
+env/
+.venv/
+
+# Any model or pipeline pickles
+*.pkl
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
