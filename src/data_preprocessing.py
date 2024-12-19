@@ -37,32 +37,47 @@ class FrequencyEncoder(BaseEstimator, TransformerMixin):
         """
         return [f"{col}_Freq" for col in self.columns]
 
-def create_preprocessing_pipeline(high_cardinality_cols, low_cardinality_cols):
+def create_preprocessing_pipeline(high_cardinality_cols=None, low_cardinality_cols=None):
     """
-    Creates a preprocessing pipeline with frequency encoding, one-hot encoding, and scaling.
+    Creates a preprocessing pipeline with optional frequency encoding, 
+    one-hot encoding, and scaling.
     
     Parameters:
-    - high_cardinality_cols (list): List of high cardinality categorical column names.
-    - low_cardinality_cols (list): List of low cardinality categorical column names.
+    - high_cardinality_cols (list or None): List of high cardinality categorical column names. If None or empty, no frequency encoding is applied.
+    - low_cardinality_cols (list or None): List of low cardinality categorical column names. If None or empty, no one-hot encoding is applied.
     
     Returns:
     - sklearn.pipeline.Pipeline: The configured preprocessing pipeline.
     """
-    frequency_encoder = FrequencyEncoder(columns=high_cardinality_cols)
+    if high_cardinality_cols is None:
+        high_cardinality_cols = []
+    if low_cardinality_cols is None:
+        low_cardinality_cols = []
     
-    one_hot_encoder = OneHotEncoder(drop=None, handle_unknown='ignore', sparse_output=False)
+    steps = []
     
-    # ColumnTransformer to apply OneHotEncoder to low cardinality columns
-    column_transformer = ColumnTransformer(transformers=[
-        ('one_hot', one_hot_encoder, low_cardinality_cols)
-    ], remainder='passthrough')
+    # Add FrequencyEncoder step only if we have high cardinality cols
+    if len(high_cardinality_cols) > 0:
+        from src.data_preprocessing import FrequencyEncoder  # ensure correct import
+        frequency_encoder = FrequencyEncoder(columns=high_cardinality_cols)
+        steps.append(('frequency_encoder', frequency_encoder))
     
-    # Full preprocessing pipeline
-    preprocessing_pipeline = Pipeline(steps=[
-        ('frequency_encoder', frequency_encoder),
-        ('one_hot_encoder', column_transformer),
-        ('scaler', StandardScaler())
-    ])
+    # Add OneHotEncoder step only if we have low cardinality cols
+    if len(low_cardinality_cols) > 0:
+        from sklearn.compose import ColumnTransformer
+        from sklearn.preprocessing import OneHotEncoder
+        
+        one_hot_encoder = OneHotEncoder(drop=None, handle_unknown='ignore', sparse_output=False)
+        column_transformer = ColumnTransformer(transformers=[
+            ('one_hot', one_hot_encoder, low_cardinality_cols)
+        ], remainder='passthrough')
+        steps.append(('one_hot_encoder', column_transformer))
+    
+    # Add scaler at the end
+    from sklearn.preprocessing import StandardScaler
+    steps.append(('scaler', StandardScaler()))
+    
+    preprocessing_pipeline = Pipeline(steps=steps)
     
     return preprocessing_pipeline
 
@@ -127,4 +142,36 @@ def preprocess_data(df, pipeline=None, fit_pipeline=True):
     # Create the DataFrame with manually defined columns
     X_encoded_df = pd.DataFrame(X, index=df.index, columns=final_feature_names)
     
+    return X_encoded_df, y, pipeline
+
+def preprocess_data_monthly(df, pipeline=None, fit_pipeline=True):
+    """
+    Preprocesses the monthly-aggregated DataFrame.
+    Expects: ['Order Date', 'Units', 'Year', 'Month']
+
+    Parameters:
+    - df (pd.DataFrame): Monthly data.
+    - pipeline (Pipeline or None): Existing pipeline. If None and fit_pipeline=True, create new.
+    - fit_pipeline (bool): Fit the pipeline on the given data if True.
+
+    Returns:
+    - X (pd.DataFrame): Preprocessed features.
+    - y (pd.Series): Target variable ('Units').
+    - pipeline (Pipeline): The fitted pipeline.
+    """
+    y = df['Units'] if 'Units' in df.columns else None
+    df = df.drop(columns=['Units'], errors='ignore')  # Drop Units from the features
+
+    # Numeric features only (already aggregated monthly)
+    numeric_features = ['Year', 'Month']
+
+    if pipeline is None:
+        pipeline = create_preprocessing_pipeline(high_cardinality_cols=[], low_cardinality_cols=[])
+
+    if fit_pipeline:
+        X = pipeline.fit_transform(df[numeric_features])
+    else:
+        X = pipeline.transform(df[numeric_features])
+
+    X_encoded_df = pd.DataFrame(X, index=df.index, columns=numeric_features)
     return X_encoded_df, y, pipeline
